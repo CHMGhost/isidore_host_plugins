@@ -3,6 +3,36 @@
 from __future__ import (absolute_import, division, print_function)
 __metaclass__ = type
 
+DOCUMENTATION = r'''
+---
+module: isidore_host
+short_description: Manage hosts in the Isidore system
+version_added: "X.Y"  # Replace X.Y with the version of Ansible you're adding this to
+description:
+  - This module allows users to add, modify, or remove hosts in the Isidore system.
+options:
+  name:
+    description:
+      - The name of the host.
+    required: true
+    type: str
+  description:
+    description:
+      - A description for the host.
+    required: false
+    type: str
+  state:
+    description:
+      - Determines whether to add (present) or delete (absent) a host.
+    default: present
+    choices:
+      - present
+      - absent
+    type: str
+author:
+  - Your Name  # Replace with your name or handle
+'''
+
 from ansible.module_utils.basic import AnsibleModule
 from isidore.libIsidore import *
 
