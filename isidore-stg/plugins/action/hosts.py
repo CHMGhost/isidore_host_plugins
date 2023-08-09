@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from isidore.libIsidore import *
 
 
