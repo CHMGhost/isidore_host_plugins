@@ -67,12 +67,15 @@ def run_module():
             result['message'] = 'Host already exists.'
 
         if module.params['description']:
-            current_description = host.getDescription()
-            if current_description != module.params['description']:
-                if not module.check_mode:
-                    host.setDescription(module.params['description'])
-                result['changed'] = True
-                result['message'] = 'Description was updated'
+            if host is None:
+                module.fail_json(msg="Host not found in Isidore.")
+            else:
+                current_description = host.getDescription()
+                if current_description != module.params['description']:
+                    if not module.check_mode:
+                        host.setDescription(module.params['description'])
+                    result['changed'] = True
+                    result['message'] = 'Description was updated'
 
     elif module.params['state'] == 'absent':
         if host:
