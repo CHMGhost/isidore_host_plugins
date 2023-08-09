@@ -1,13 +1,14 @@
 #!/usr/bin/python
 
 from __future__ import (absolute_import, division, print_function)
+
 __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
 module: isidore_host
 short_description: Manage hosts in the Isidore system
-version_added: "X.Y"  # Replace X.Y with the version of Ansible you're adding this to
+version_added: "1.0"  # Replace X.Y with the version of Ansible you're adding this to
 description:
   - This module allows users to add, modify, or remove hosts in the Isidore system.
 options:
@@ -30,7 +31,7 @@ options:
       - absent
     type: str
 author:
-  - Your Name  # Replace with your name or handle
+  - Minor Keith
 '''
 
 from ansible.module_utils.basic import AnsibleModule
@@ -80,13 +81,14 @@ def run_module():
     elif module.params['state'] == 'absent':
         if host:
             if not module.check_mode:
-                isidore.deleteHost(module.params['name'])
+                isidore.delete(module.params['name'])
             result['changed'] = True
             result['message'] = 'Host was deleted.'
         else:
             result['message'] = 'Host does not exist'
 
     module.exit_json(**result)
+
 
 if __name__ == '__main__':
     run_module()
