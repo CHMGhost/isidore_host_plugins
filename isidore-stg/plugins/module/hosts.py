@@ -6,7 +6,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: isidore_host
+module: hosts
 short_description: Manage hosts in the Isidore system
 version_added: "1.0"
 description:
