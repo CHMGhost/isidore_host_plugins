@@ -79,13 +79,16 @@ def run_module():
                     result['message'] = 'Description was updated'
 
     elif module.params['state'] == 'absent':
+        host = isidore.getHost(module.params['name'])
         if host:
             if not module.check_mode:
-                isidore.delete(module.params['name'])
+                host.delete()
             result['changed'] = True
             result['message'] = 'Host was deleted.'
         else:
-            result['message'] = 'Host does not exist'
+            result['changed'] = False
+            result['message'] = 'Host does not exist.'
+
 
     module.exit_json(**result)
 
