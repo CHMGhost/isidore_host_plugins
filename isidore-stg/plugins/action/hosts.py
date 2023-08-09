@@ -62,6 +62,7 @@ def run_module():
         if not host:
             if not module.check_mode:
                 isidore.createHost(module.params['name'])
+            host = isidore.getHost(module.params['name'])
             result['changed'] = True
             result['message'] = 'Host was created successfully.'
         else:
