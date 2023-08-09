@@ -8,7 +8,7 @@ DOCUMENTATION = r'''
 ---
 module: isidore_host
 short_description: Manage hosts in the Isidore system
-version_added: "1.0"  # Replace X.Y with the version of Ansible you're adding this to
+version_added: "1.0"
 description:
   - This module allows users to add, modify, or remove hosts in the Isidore system.
 options:
@@ -35,25 +35,62 @@ author:
 '''
 
 from ansible.module_utils.basic import AnsibleModule
-from isidore_host_logic import run_module_logic
+from isidore.libIsidore import *
 
 
-def main():
+def run_module():
+    module_args = dict(
+        name=dict(type='str', required=True),
+        description=dict(type='str', required=False, default=None),
+        state=dict(type='str', choices=['present', 'absent'], default='present')
+    )
+
+    result = dict(
+        changed=False,
+        message=''
+    )
+
     module = AnsibleModule(
-        argument_spec=dict(
-            name=dict(type='str', required=True),
-            description=dict(type='str', required=False),
-            state=dict(type='str', choices=['present', 'absent'], default='present')
-        ),
+        argument_spec=module_args,
         supports_check_mode=True
     )
 
-    result = run_module_logic(module)
+    isidore = Isidore.fromConfigFile()
+    host = isidore.getHost(module.params['name'])
 
-    if result.get('failed'):
-        module.fail_json(**result)
-    else:
-        module.exit_json(**result)
+    if module.params['state'] == 'present':
+        if not host:
+            if not module.check_mode:
+                isidore.createHost(module.params['name'])
+            host = isidore.getHost(module.params['name'])
+            result['changed'] = True
+            result['message'] = 'Host was created successfully.'
+        else:
+            result['message'] = 'Host already exists.'
+
+        if module.params['description']:
+            if host is None:
+                module.fail_json(msg="Host not found in Isidore.")
+            else:
+                current_description = host.getDescription()
+                if current_description != module.params['description']:
+                    if not module.check_mode:
+                        host.setDescription(module.params['description'])
+                    result['changed'] = True
+                    result['message'] = 'Description was updated'
+
+    elif module.params['state'] == 'absent':
+        host = isidore.getHost(module.params['name'])
+        if host:
+            if not module.check_mode:
+                host.delete()
+            result['changed'] = True
+            result['message'] = 'Host was deleted.'
+        else:
+            result['changed'] = False
+            result['message'] = 'Host does not exist.'
+
+    module.exit_json(**result)
 
 
 if __name__ == '__main__':
