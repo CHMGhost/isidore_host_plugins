@@ -49,11 +49,15 @@ def run_module():
         supports_check_mode=True
     )
 
+    print("Debug: Initializing Isidore from config file.")
     isidore = Isidore.fromConfigFile()
+    print(f"Debug: Fetching tag with name: {module.params['name']}")
     tag = isidore.getTag(module.params['name'])
 
     if module.params['state'] == 'present':
+        print("Debug: Desired state is 'present'")
         if not tag:
+            print("Debug: Tag not found. Creating tag.")
             if not module.check_mode():
                 isidore.createTag(module.params['name'])
             result['changed'] = True
