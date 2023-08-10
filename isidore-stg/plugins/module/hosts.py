@@ -82,18 +82,14 @@ def run_module():
     elif module.params['state'] == 'absent':
         host = isidore.getHost(module.params['name'])
         if host:
-            host_details = host.getDetails()  # Fetch details about the host
-            associated_tags = host_details[host._hostname]['vars']['isidore']['tags']  # Extract associated tags
+            # Remove all associated tags before deleting the host
+            for tag in host.getTags():
+                tag.delete()
 
-            if associated_tags:
-                result['changed'] = False
-                result[
-                    'message'] = 'Cannot delete host. Please remove the association of tags to the host before removing it.'
-            else:
-                if not module.check_mode:
-                    host.delete()
-                result['changed'] = True
-                result['message'] = 'Host was deleted.'
+            if not module.check_mode:
+                host.delete()
+            result['changed'] = True
+            result['message'] = 'Host was deleted.'
         else:
             result['changed'] = False
             result['message'] = 'Host does not exist.'
