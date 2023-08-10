@@ -56,16 +56,15 @@ def run_module():
         if not tag:
             if not module.check_mode():
                 isidore.createTag(module.params['name'])
-                tag = isidore.getTag(module.params['name'])
-                result['changed'] = True
-                result['message'] = 'Tag was successfully added.'
+            result['changed'] = True
+            result['message'] = 'Tag was successfully added.'
         else:
             result['message'] = 'Tag already exists.'
 
     elif module.params['state'] == 'absent':
         if tag:
             if not module.check_mode():
-                isidore.delete(module.params['name'])
+                tag.delete()
             result['changed'] = True
             result['message'] = 'Tag was successfully removed.'
         else:
