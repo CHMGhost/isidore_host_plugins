@@ -58,7 +58,7 @@ def run_module():
         print("Debug: Desired state is 'present'")
         if not tag:
             print("Debug: Tag not found. Creating tag.")
-            if not module.check_mode():
+            if not module.check_mode:
                 isidore.createTag(module.params['name'])
             result['changed'] = True
             result['message'] = 'Tag was successfully added.'
@@ -67,7 +67,7 @@ def run_module():
 
     elif module.params['state'] == 'absent':
         if tag:
-            if not module.check_mode():
+            if not module.check_mode:
                 tag.delete()
             result['changed'] = True
             result['message'] = 'Tag was successfully removed.'
