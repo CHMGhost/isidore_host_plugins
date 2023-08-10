@@ -6,7 +6,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: isidore_addtag
+module: addtag
 short_description: Manage tags in the Isidore system
 version_added: "X.Y"  # Replace X.Y with the version of Ansible you're adding this to
 description:
