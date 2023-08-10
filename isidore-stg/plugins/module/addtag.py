@@ -56,6 +56,7 @@ def run_module():
         if not tag:
             if not module.check_mode():
                 isidore.createTag(module.params['name'])
+            tag = isidore.getTag(module.params['name'])
             result['changed'] = True
             result['message'] = 'Tag was successfully added.'
         else:
