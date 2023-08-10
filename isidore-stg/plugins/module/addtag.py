@@ -65,7 +65,7 @@ def run_module():
     elif module.params['state'] == 'absent':
         if tag:
             if not module.check_mode():
-                isidore.removeTag(module.params['name'])
+                isidore.delete(module.params['name'])
             result['changed'] = True
             result['message'] = 'Tag was successfully removed.'
         else:
