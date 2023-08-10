@@ -83,6 +83,13 @@ def run_module():
         host = isidore.getHost(module.params['name'])
         if host:
             if not module.check_mode:
+                # First, delete the associated tags from the HostHasTag table
+                # This is a test!
+                cursor = isidore._conn.cursor()
+                stmt_remove_tags = "DELETE FROM HostHasTag WHERE HostID = %s"
+                cursor.execute(stmt_remove_tags, [host._hostId])
+                cursor.close()
+
                 host.delete()
             result['changed'] = True
             result['message'] = 'Host was deleted.'
