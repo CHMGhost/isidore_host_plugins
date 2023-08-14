@@ -18,6 +18,11 @@ options:
       - The name of the host.
     required: true
     type: str
+  commission:
+    description:
+      - Determines whether to commission the host.
+    default: false
+    type: bool
   description:
     description:
       - A description for the host.
