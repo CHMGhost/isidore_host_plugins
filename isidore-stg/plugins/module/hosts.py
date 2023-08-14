@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from __future__ import (absolute_import, division, print_function)
+from datetime import datetime
 
 __metaclass__ = type
 
@@ -67,6 +68,16 @@ def run_module():
             result['message'] = 'Host was created successfully.'
         else:
             result['message'] = 'Host already exists.'
+
+        if module.params['commission']:
+            if not host.getCommissionDate():  # Check if the host is not already commissioned
+                if not module.check_mode:
+                    host.setCommissionDate(datetime.now())
+                result['changed'] = True
+                result['message'] += f' Host was commissioned on {datetime.now().strftime("%Y-%m-%d")}.'
+            else:
+                existing_commission_date = host.getCommissionDate().strftime('%Y-%m-%d')
+                result['message'] += f' Host was already commissioned on {existing_commission_date}.'
 
         if module.params['description']:
             if host is None:
