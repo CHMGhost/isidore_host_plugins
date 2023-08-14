@@ -43,7 +43,8 @@ def run_module():
     module_args = dict(
         name=dict(type='str', required=True),
         description=dict(type='str', required=False, default=None),
-        state=dict(type='str', choices=['present', 'absent'], default='present')
+        state=dict(type='str', choices=['present', 'absent'], default='present'),
+        commission=dict(type='bool', default=False)
     )
 
     result = dict(
