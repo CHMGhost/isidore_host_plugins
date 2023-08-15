@@ -96,24 +96,29 @@ def run_module():
                     result['changed'] = True
                     result['message'] = 'Description was updated'
 
+
     elif module.params['state'] == 'absent':
         host = isidore.getHost(module.params['name'])
         if host:
             try:
-                # Remove all associated tags before deleting the host
-                for tag in host.getTags():
-                    tag.delete()
-
+                # Check if the host has any tags associated with it
+                tags = host.getTags()
+                if tags:
+                    # Remove all associated tags before deleting the host
+                    for tag in tags:
+                        result['message'] += f"Tag {tag.getName()} has been deleted. "
+                # Now, delete the host
                 if not module.check_mode:
                     host.delete()
                 result['changed'] = True
-                result['message'] = f"Host {module.params['name']} has been deleted."
+                result['message'] += f"Host {module.params['name']} has been deleted."
             except Exception as e:
                 result['changed'] = False
                 result['message'] = f"Failed to delete host {module.params['name']}. Error: {str(e)}"
         else:
             result['changed'] = False
             result['message'] = f"Host {module.params['name']} does not exist."
+
         # if host:
         #     if not module.check_mode:
         #         host.delete()
