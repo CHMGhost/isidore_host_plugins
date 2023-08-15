@@ -1,0 +1,56 @@
+---
+- name: Test Isidore Host and Tag Modules
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create a new host
+      isidore_host:
+        name: "example.com"
+        state: present
+      register: create_result
+
+    - name: Display create host result
+      debug:
+        var: create_result
+
+    - name: Add a tag named "TestTag"
+      isidore_tag:
+        name: "TestTag"
+        state: present
+      register: tag_result
+
+    - name: Display tag result
+      debug:
+        var: tag_result
+
+    - name: Commission the host
+      isidore_host:
+        name: "example.com"
+        commission: true
+      register: commission_result
+
+    - name: Display commission host result
+      debug:
+        var: commission_result
+
+    - name: Decommission the host
+      isidore_host:
+        name: "example.com"
+        decommission: true
+      register: decommission_result
+
+    - name: Display decommission host result
+      debug:
+        var: decommission_result
+
+    - name: Delete the tag named "TestTag"
+      isidore_tag:
+        name: "TestTag"
+        state: absent
+      register: delete_tag_result
+
+    - name: Display delete tag result
+      debug:
+        var: delete_tag_result
+
+
