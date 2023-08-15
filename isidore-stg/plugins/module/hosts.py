@@ -89,7 +89,7 @@ def run_module():
         if module.params['decommission']:
             if not host.getDecommissionDate():  # Check if the host is not already commissioned
                 if not module.check_mode:
-                    host.getDecommissionDate(datetime.now())
+                    host.setDecommissionDate(datetime.now())
                 result['changed'] = True
                 result['message'] += f' Host was decommissioned on {datetime.now().strftime("%Y-%m-%d")}.'
             else:
