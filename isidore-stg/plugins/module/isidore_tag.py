@@ -8,7 +8,7 @@ DOCUMENTATION = r'''
 ---
 module: addtag
 short_description: Manage tags in the Isidore system
-version_added: "X.Y"  # Replace X.Y with the version of Ansible you're adding this to
+version_added: "1.0"
 description:
   - This module allows users to add or remove tags in the Isidore system.
 options:
@@ -26,7 +26,7 @@ options:
       - absent
     type: str
 author:
-  - Your Name  # Replace with your name or handle
+  - Minor Keith
 '''
 
 from ansible.module_utils.basic import AnsibleModule

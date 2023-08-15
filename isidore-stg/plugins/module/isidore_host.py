@@ -9,7 +9,7 @@ DOCUMENTATION = r'''
 ---
 module: isidore_host
 short_description: Manage hosts in the Isidore system
-version_added: "1.0"  # Replace X.Y with the version of Ansible you're adding this to
+version_added: "1.0" 
 description:
   - This module allows users to add, modify, or remove hosts in the Isidore system.
 options:
@@ -87,7 +87,7 @@ def run_module():
                 result['message'] += f' Host was already commissioned on {existing_commission_date}.'
 
         if module.params['decommission']:
-            if not host.getDecommissionDate():  # Check if the host is not already commissioned
+            if not host.getDecommissionDate():  # Check if the host is not already decommissioned
                 if not module.check_mode:
                     host.setDecommissionDate(datetime.now())
                 result['changed'] = True
@@ -106,7 +106,6 @@ def run_module():
                         host.setDescription(module.params['description'])
                     result['changed'] = True
                     result['message'] = 'Description was updated'
-
 
     elif module.params['state'] == 'absent':
         host = isidore.getHost(module.params['name'])
@@ -130,16 +129,6 @@ def run_module():
         else:
             result['changed'] = False
             result['message'] = f"Host {module.params['name']} does not exist."
-
-        # if host:
-        #     if not module.check_mode:
-        #         host.delete()
-        #     result['changed'] = True
-        #     result['message'] = 'Host was deleted.'
-        # else:
-        #     result['changed'] = False
-        #     result['message'] = 'Host does not exist.'
-
 
     module.exit_json(**result)
 
