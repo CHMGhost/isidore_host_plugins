@@ -49,7 +49,8 @@ def run_module():
         name=dict(type='str', required=True),
         description=dict(type='str', required=False, default=None),
         state=dict(type='str', choices=['present', 'absent'], default='present'),
-        commission=dict(type='bool', default=False)
+        commission=dict(type='bool', default=False),
+        decommission=dict(type='bool', default=False)
     )
 
     result = dict(
@@ -84,6 +85,16 @@ def run_module():
             else:
                 existing_commission_date = host.getCommissionDate().strftime('%Y-%m-%d')
                 result['message'] += f' Host was already commissioned on {existing_commission_date}.'
+
+        if module.params['decommission']:
+            if not host.getDecommissionDate():  # Check if the host is not already commissioned
+                if not module.check_mode:
+                    host.getDecommissionDate(datetime.now())
+                result['changed'] = True
+                result['message'] += f' Host was decommissioned on {datetime.now().strftime("%Y-%m-%d")}.'
+            else:
+                existing_decommission_date = host.getDecommissionDate().strftime('%Y-%m-%d')
+                result['message'] += f' Host was already decommissioned on {existing_decommission_date}.'
 
         if module.params['description']:
             if host is None:
