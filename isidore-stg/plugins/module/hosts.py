@@ -106,6 +106,7 @@ def run_module():
                 if tags:
                     # Remove all associated tags before deleting the host
                     for tag in tags:
+                        tag.delete()
                         result['message'] += f"Tag {tag.getName()} has been deleted. "
                 # Now, delete the host
                 if not module.check_mode:
