@@ -6,7 +6,7 @@ __metaclass__ = type
 
 DOCUMENTATION = r'''
 ---
-module: addtag
+module: tag
 short_description: Manage tags in the Isidore system
 version_added: "1.0"
 description:
