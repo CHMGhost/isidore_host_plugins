@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Manage hosts in the Isidore system
+      host:
+        name: "example_host"
+        state: "absent"
+
