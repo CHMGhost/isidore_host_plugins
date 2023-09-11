@@ -1,5 +1,5 @@
 from ansible.plugins.action import ActionBase
-from isidore.libIsidore import Isidore
+from isidore.libIsidore import *
 
 class ActionModule(ActionBase):
 
@@ -7,7 +7,32 @@ class ActionModule(ActionBase):
         if task_vars is None:
             task_vars = dict()
 
-        # Use the addtag module
-        result = self._execute_module(module_name='tag', module_args=self._task.args, task_vars=task_vars)
+        # Access arguments
+        name = self._task.args.get('name')
+        state = self._task.args.get('state', 'present')
+
+        result = dict(
+            changed=False,
+            message=''
+        )
+
+        isidore = Isidore.fromConfigFile()
+        tag = isidore.getTag(name)
+
+        if state == 'present':
+            if not tag:
+                isidore.createTag(name)
+                result['changed'] = True
+                result['message'] = 'Tag was successfully added.'
+            else:
+                result['message'] = 'Tag already exists.'
+
+        elif state == 'absent':
+            if tag:
+                tag.delete()
+                result['changed'] = True
+                result['message'] = 'Tag was successfully removed.'
+            else:
+                result['message'] = 'Tag does not exist.'
 
         return result
