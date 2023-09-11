@@ -1,5 +1,5 @@
 from ansible.plugins.action import ActionBase
-
+from isidore.libIsidore import Isidore
 
 class ActionModule(ActionBase):
 
