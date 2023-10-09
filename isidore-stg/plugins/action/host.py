@@ -43,15 +43,6 @@ class ActionModule(ActionBase):
                         existing_commission_date = host.getCommissionDate().strftime('%Y-%m-%d')
                         result['message'] += f' Host was already commissioned on {existing_commission_date}.'
 
-                if decommission:
-                    if not host.getDecommissionDate():
-                        host.setDecommissionDate(datetime.now())
-                        result['changed'] = True
-                        result['message'] += f' Host was decommissioned on {datetime.now().strftime("%Y-%m-%d")}.'
-                    else:
-                        existing_decommission_date = host.getDecommissionDate().strftime('%Y-%m-%d')
-                        result['message'] += f' Host was already decommissioned on {existing_decommission_date}.'
-
                 if description:
                     if host is None:
                         result['changed'] = False
@@ -62,6 +53,19 @@ class ActionModule(ActionBase):
                             host.setDescription(description)
                             result['changed'] = True
                             result['message'] = 'Description was updated'
+
+            elif state == 'decommissioned':
+                if host:
+                    # Check if host is already decommissioned
+                    if not host.isDecommissioned():  # Replace with actual check
+                        # Decommission the host
+                        host.decommission()  # Replace with actual method to decommission
+                        result['changed'] = True
+                        result['message'] = f'Host {name} was successfully decommissioned.'
+                    else:
+                        result['message'] = f'Host {name} is already decommissioned.'
+                else:
+                    result['message'] = f'Host {name} does not exist.'
 
             elif state == 'absent':
                 if host:
