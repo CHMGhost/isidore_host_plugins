@@ -16,23 +16,28 @@ class ActionModule(ActionBase):
             message=''
         )
 
-        isidore = Isidore.fromConfigFile()
-        tag = isidore.getTag(name)
+        try:
 
-        if state == 'present':
-            if not tag:
-                isidore.createTag(name)
-                result['changed'] = True
-                result['message'] = 'Tag was successfully added.'
-            else:
-                result['message'] = 'Tag already exists.'
+            isidore = Isidore.fromConfigFile()
+            tag = isidore.getTag(name)
 
-        elif state == 'absent':
-            if tag:
-                tag.delete()
-                result['changed'] = True
-                result['message'] = 'Tag was successfully removed.'
-            else:
-                result['message'] = 'Tag does not exist.'
+            if state == 'present':
+                if not tag:
+                    isidore.createTag(name)
+                    result['changed'] = True
+                    result['message'] = 'Tag was successfully added.'
+                else:
+                    result['message'] = 'Tag already exists.'
+
+            elif state == 'absent':
+                if tag:
+                    tag.delete()
+                    result['changed'] = True
+                    result['message'] = 'Tag was successfully removed.'
+                else:
+                    result['message'] = 'Tag does not exist.'
+        except Exception as e:
+            result['failed'] = True
+            result['message'] = f"An error occurred: {str(e)}"
 
         return result
