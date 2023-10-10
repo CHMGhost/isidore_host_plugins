@@ -56,10 +56,8 @@ class ActionModule(ActionBase):
 
             elif state == 'decommissioned':
                 if host:
-                    # Check if host is already decommissioned
-                    if not host.isDecommissioned():  # Replace with actual check
-                        # Decommission the host
-                        host.decommission()  # Replace with actual method to decommission
+                    if not host.getDecommissionDate():
+                        host.setDecommissionDate()  # Set decommission date to now
                         result['changed'] = True
                         result['message'] = f'Host {name} was successfully decommissioned.'
                     else:
